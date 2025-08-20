@@ -22,7 +22,6 @@ function App() {
     favoriteSportsIcon: ''
   })
   const [isEditing, setIsEditing] = useState(false)
-  const [animationDirection, setAnimationDirection] = useState('forward')
 
   // Load data from localStorage on initial render
   useEffect(() => {
@@ -37,15 +36,8 @@ function App() {
     localStorage.setItem('multiStepFormData', JSON.stringify(formData))
   }, [formData])
 
-  const nextStep = () => {
-    setAnimationDirection('forward')
-    setStep(step + 1)
-  }
-
-  const prevStep = () => {
-    setAnimationDirection('backward')
-    setStep(step - 1)
-  }
+  const nextStep = () => setStep(step + 1)
+  const prevStep = () => setStep(step - 1)
 
   const handleChange = (input) => (e) => {
     setFormData({ ...formData, [input]: e.target.value })
@@ -73,7 +65,7 @@ function App() {
 
   const handleSave = () => {
     setIsEditing(false)
-    setStep(8)
+    setStep(8) // Go back to review step
   }
 
   const renderStep = () => {
@@ -81,8 +73,7 @@ function App() {
       nextStep,
       prevStep,
       handleChange,
-      values: formData,
-      animationDirection
+      values: formData
     }
 
     switch (step) {
@@ -117,14 +108,8 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
         <ProgressBar step={step} />
-        <div className="px-6 py-8 min-h-[400px] flex items-center justify-center relative overflow-hidden">
-          <div className={`w-full transition-all duration-500 ease-in-out ${
-            animationDirection === 'forward' 
-              ? 'animate-slide-in-forward' 
-              : 'animate-slide-in-backward'
-          }`}>
-            {renderStep()}
-          </div>
+        <div className="px-6 py-8 min-h-[400px] flex items-center justify-center">
+          {renderStep()}
         </div>
       </div>
     </div>

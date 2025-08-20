@@ -1,7 +1,6 @@
-// src/components/Step1.jsx
 import { useState } from 'react'
 
-const Step1 = ({ nextStep, handleChange, values, animationDirection }) => {
+const Step1 = ({ nextStep, handleChange, values }) => {
   const [error, setError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
 
