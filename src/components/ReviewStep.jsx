@@ -1,7 +1,7 @@
 // src/components/ReviewStep.jsx
 import { useState } from 'react'
 
-const ReviewStep = ({ values, onEdit, onReset }) => {
+const ReviewStep = ({ values, onEdit, onReset, direction }) => {
   const [isExiting, setIsExiting] = useState(false)
 
   const handleEditClick = () => {
@@ -19,7 +19,7 @@ const ReviewStep = ({ values, onEdit, onReset }) => {
   }
 
   return (
-    <div className={`w-full text-center transition-all duration-500 ${isExiting ? 'opacity-0 -translate-y-10' : 'opacity-100 translate-y-0'}`}>
+    <div className={`w-full text-center transition-all duration-500 ${isExiting ? 'opacity-0 -translate-y-10' : direction === 'forward' ? 'animate-slide-in' : 'animate-slide-in-reverse'}`}>
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>

@@ -22,6 +22,7 @@ function App() {
     favoriteSportsIcon: ''
   })
   const [isEditing, setIsEditing] = useState(false)
+  const [direction, setDirection] = useState('forward')
 
   // Load data from localStorage on initial render
   useEffect(() => {
@@ -36,8 +37,15 @@ function App() {
     localStorage.setItem('multiStepFormData', JSON.stringify(formData))
   }, [formData])
 
-  const nextStep = () => setStep(step + 1)
-  const prevStep = () => setStep(step - 1)
+  const nextStep = () => {
+    setDirection('forward')
+    setStep(step + 1)
+  }
+  
+  const prevStep = () => {
+    setDirection('backward')
+    setStep(step - 1)
+  }
 
   const handleChange = (input) => (e) => {
     setFormData({ ...formData, [input]: e.target.value })
@@ -78,19 +86,19 @@ function App() {
 
     switch (step) {
       case 1:
-        return <Step1 {...commonProps} />
+        return <Step1 {...commonProps} direction={direction} />
       case 2:
-        return <Step2 {...commonProps} />
+        return <Step2 {...commonProps} direction={direction} />
       case 3:
-        return <Step3 {...commonProps} />
+        return <Step3 {...commonProps} direction={direction} />
       case 4:
-        return <Step4 {...commonProps} />
+        return <Step4 {...commonProps} direction={direction} />
       case 5:
-        return <Step5 {...commonProps} />
+        return <Step5 {...commonProps} direction={direction} />
       case 6:
-        return <Step6 {...commonProps} />
+        return <Step6 {...commonProps} direction={direction} />
       case 7:
-        return <Step7 {...commonProps} />
+        return <Step7 {...commonProps} direction={direction} />
       case 8:
         return <ReviewStep 
           values={formData} 
@@ -98,9 +106,10 @@ function App() {
           onSave={handleSave}
           onReset={resetForm}
           isEditing={isEditing}
+          direction={direction}
         />
       default:
-        return <Step1 {...commonProps} />
+        return <Step1 {...commonProps} direction={direction} />
     }
   }
 
@@ -108,7 +117,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
         <ProgressBar step={step} />
-        <div className="px-6 py-8 min-h-[400px] flex items-center justify-center">
+        <div className="px-6 py-8 min-h-[400px] flex items-center justify-center overflow-hidden">
           {renderStep()}
         </div>
       </div>

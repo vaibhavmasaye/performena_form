@@ -1,6 +1,7 @@
+// src/components/Step1.jsx
 import { useState } from 'react'
 
-const Step1 = ({ nextStep, handleChange, values }) => {
+const Step1 = ({ nextStep, handleChange, values, direction }) => {
   const [error, setError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
 
@@ -17,7 +18,7 @@ const Step1 = ({ nextStep, handleChange, values }) => {
   }
 
   return (
-    <div className="w-full">
+    <div className={`w-full transition-all duration-500 ${direction === 'forward' ? 'animate-slide-in' : 'animate-slide-in-reverse'}`}>
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Personal Information</h2>
       <div className="mb-6">
         <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
