@@ -9,6 +9,7 @@ import Step5 from './components/Step5'
 import Step6 from './components/Step6'
 import Step7 from './components/Step7'
 import ReviewStep from './components/ReviewStep'
+import EditSelection from './components/EditSelection'
 
 function App() {
   const [step, setStep] = useState(1)
@@ -68,10 +69,16 @@ function App() {
 
   const handleEdit = () => {
     setIsEditing(true)
-    setStep(1)
+    setStep(9) // Go to edit selection screen
   }
 
-  const handleSave = () => {
+  const handleSaveEdit = (editedValues) => {
+    setFormData(editedValues)
+    setIsEditing(false)
+    setStep(8) // Go back to review step
+  }
+
+  const handleCancelEdit = () => {
     setIsEditing(false)
     setStep(8) // Go back to review step
   }
@@ -81,42 +88,48 @@ function App() {
       nextStep,
       prevStep,
       handleChange,
-      values: formData
+      values: formData,
+      direction
     }
 
     switch (step) {
       case 1:
-        return <Step1 {...commonProps} direction={direction} />
+        return <Step1 {...commonProps} />
       case 2:
-        return <Step2 {...commonProps} direction={direction} />
+        return <Step2 {...commonProps} />
       case 3:
-        return <Step3 {...commonProps} direction={direction} />
+        return <Step3 {...commonProps} />
       case 4:
-        return <Step4 {...commonProps} direction={direction} />
+        return <Step4 {...commonProps} />
       case 5:
-        return <Step5 {...commonProps} direction={direction} />
+        return <Step5 {...commonProps} />
       case 6:
-        return <Step6 {...commonProps} direction={direction} />
+        return <Step6 {...commonProps} />
       case 7:
-        return <Step7 {...commonProps} direction={direction} />
+        return <Step7 {...commonProps} />
       case 8:
         return <ReviewStep 
           values={formData} 
           onEdit={handleEdit}
-          onSave={handleSave}
           onReset={resetForm}
-          isEditing={isEditing}
+          direction={direction}
+        />
+      case 9:
+        return <EditSelection 
+          values={formData} 
+          onSaveEdit={handleSaveEdit}
+          onCancel={handleCancelEdit}
           direction={direction}
         />
       default:
-        return <Step1 {...commonProps} direction={direction} />
+        return <Step1 {...commonProps} />
     }
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-        <ProgressBar step={step} />
+        {step < 9 && <ProgressBar step={step} />}
         <div className="px-6 py-8 min-h-[400px] flex items-center justify-center overflow-hidden">
           {renderStep()}
         </div>
