@@ -4,27 +4,39 @@ import { useState } from 'react'
 const Step3 = ({ nextStep, handleChange, values, direction }) => {
   const [error, setError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
+  const [localValue, setLocalValue] = useState(values.email)
 
   const continueStep = (e) => {
     e.preventDefault()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     
-    if (!values.email.trim()) {
+    if (!localValue.trim()) {
       setError('Please enter your email address')
       setIsShaking(true)
+      setLocalValue('') // Clear the input
       setTimeout(() => setIsShaking(false), 500)
       return
     }
     
-    if (!emailRegex.test(values.email)) {
+    if (!emailRegex.test(localValue)) {
       setError('Please enter a valid email address')
       setIsShaking(true)
+      setLocalValue('') // Clear the input
       setTimeout(() => setIsShaking(false), 500)
       return
     }
     
     setError('')
+    handleChange('email')({ target: { value: localValue } })
     nextStep()
+  }
+
+  const handleInputChange = (e) => {
+    setLocalValue(e.target.value)
+    // Clear error when user starts typing
+    if (error) {
+      setError('')
+    }
   }
 
   return (
@@ -41,8 +53,8 @@ const Step3 = ({ nextStep, handleChange, values, direction }) => {
             isShaking ? 'animate-shake' : ''
           }`}
           placeholder="Enter your email address"
-          value={values.email}
-          onChange={handleChange('email')}
+          value={localValue}
+          onChange={handleInputChange}
           autoFocus
         />
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}

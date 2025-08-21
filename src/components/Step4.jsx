@@ -4,19 +4,30 @@ import { useState } from 'react'
 const Step4 = ({ nextStep, handleChange, values, direction }) => {
   const [error, setError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
+  const [localValue, setLocalValue] = useState(values.city)
 
   const continueStep = (e) => {
     e.preventDefault()
     
-    if (!values.city.trim() || values.city.trim().length < 3) {
+    if (!localValue.trim() || localValue.trim().length < 3) {
       setError('Please enter your city (min 3 characters)')
       setIsShaking(true)
+      setLocalValue('') // Clear the input
       setTimeout(() => setIsShaking(false), 500)
       return
     }
     
     setError('')
+    handleChange('city')({ target: { value: localValue } })
     nextStep()
+  }
+
+  const handleInputChange = (e) => {
+    setLocalValue(e.target.value)
+    // Clear error when user starts typing
+    if (error) {
+      setError('')
+    }
   }
 
   return (
@@ -33,8 +44,8 @@ const Step4 = ({ nextStep, handleChange, values, direction }) => {
             isShaking ? 'animate-shake' : ''
           }`}
           placeholder="Enter your city"
-          value={values.city}
-          onChange={handleChange('city')}
+          value={localValue}
+          onChange={handleInputChange}
           autoFocus
         />
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}

@@ -4,17 +4,28 @@ import { useState } from 'react'
 const Step1 = ({ nextStep, handleChange, values, direction }) => {
   const [error, setError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
+  const [localValue, setLocalValue] = useState(values.fullName)
 
   const continueStep = (e) => {
     e.preventDefault()
-    if (!values.fullName.trim() || values.fullName.trim().length < 3) {
+    if (!localValue.trim() || localValue.trim().length < 3) {
       setError('Please enter your full name (min 3 characters)')
       setIsShaking(true)
+      setLocalValue('') // Clear the input
       setTimeout(() => setIsShaking(false), 500)
       return
     }
     setError('')
+    handleChange('fullName')({ target: { value: localValue } })
     nextStep()
+  }
+
+  const handleInputChange = (e) => {
+    setLocalValue(e.target.value)
+    // Clear error when user starts typing
+    if (error) {
+      setError('')
+    }
   }
 
   return (
@@ -31,8 +42,8 @@ const Step1 = ({ nextStep, handleChange, values, direction }) => {
             isShaking ? 'animate-shake' : ''
           }`}
           placeholder="Enter your full name"
-          value={values.fullName}
-          onChange={handleChange('fullName')}
+          value={localValue}
+          onChange={handleInputChange}
           autoFocus
         />
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}

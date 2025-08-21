@@ -4,27 +4,39 @@ import { useState } from 'react'
 const Step2 = ({ nextStep, handleChange, values, direction }) => {
   const [error, setError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
+  const [localValue, setLocalValue] = useState(values.phone)
 
   const continueStep = (e) => {
     e.preventDefault()
     const phoneRegex = /^[0-9]{10}$/
     
-    if (!values.phone.trim()) {
+    if (!localValue.trim()) {
       setError('Please enter your phone number')
       setIsShaking(true)
+      setLocalValue('') // Clear the input
       setTimeout(() => setIsShaking(false), 500)
       return
     }
     
-    if (!phoneRegex.test(values.phone)) {
+    if (!phoneRegex.test(localValue)) {
       setError('Please enter a valid 10-digit phone number')
       setIsShaking(true)
+      setLocalValue('') // Clear the input
       setTimeout(() => setIsShaking(false), 500)
       return
     }
     
     setError('')
+    handleChange('phone')({ target: { value: localValue } })
     nextStep()
+  }
+
+  const handleInputChange = (e) => {
+    setLocalValue(e.target.value)
+    // Clear error when user starts typing
+    if (error) {
+      setError('')
+    }
   }
 
   return (
@@ -41,8 +53,8 @@ const Step2 = ({ nextStep, handleChange, values, direction }) => {
             isShaking ? 'animate-shake' : ''
           }`}
           placeholder="Enter your 10-digit phone number"
-          value={values.phone}
-          onChange={handleChange('phone')}
+          value={localValue}
+          onChange={handleInputChange}
           autoFocus
         />
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}

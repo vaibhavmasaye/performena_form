@@ -129,6 +129,13 @@ const EditSelection = ({ values, onSaveEdit, onCancel, direction }) => {
       setErrors(newErrors)
       setShakingFields(newShakingFields)
       
+      // Clear the input values for fields with errors
+      const clearedValues = { ...editedValues }
+      Object.keys(newErrors).forEach(key => {
+        clearedValues[key] = ''
+      })
+      setEditedValues(clearedValues)
+      
       // Remove shake animation after 500ms
       setTimeout(() => {
         setShakingFields({})
@@ -164,6 +171,9 @@ const EditSelection = ({ values, onSaveEdit, onCancel, direction }) => {
       if (error) {
         setErrors(prev => ({ ...prev, [key]: error }))
         setShakingFields(prev => ({ ...prev, [key]: true }))
+        
+        // Clear the input value for this field
+        setEditedValues(prev => ({ ...prev, [key]: '' }))
         
         // Remove shake animation after 500ms
         setTimeout(() => {
